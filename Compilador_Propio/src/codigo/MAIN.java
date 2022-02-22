@@ -5,8 +5,12 @@
  */
 package codigo;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,8 +40,10 @@ public class MAIN extends javax.swing.JFrame {
 
         Elige_archivo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Resultado = new javax.swing.JTextArea();
-        Compilar = new javax.swing.JButton();
+        Panel_codigo = new javax.swing.JTextArea();
+        Btn_Compilar = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        Text_final = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,11 +55,20 @@ public class MAIN extends javax.swing.JFrame {
             }
         });
 
-        Resultado.setColumns(20);
-        Resultado.setRows(5);
-        jScrollPane1.setViewportView(Resultado);
+        Panel_codigo.setColumns(20);
+        Panel_codigo.setRows(5);
+        jScrollPane1.setViewportView(Panel_codigo);
 
-        Compilar.setText("Compilar Código");
+        Btn_Compilar.setText("Compilar Código");
+        Btn_Compilar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Btn_CompilarActionPerformed(evt);
+            }
+        });
+
+        Text_final.setColumns(20);
+        Text_final.setRows(5);
+        jScrollPane2.setViewportView(Text_final);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,45 +76,235 @@ public class MAIN extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Compilar)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(Elige_archivo)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(Btn_Compilar)
+                        .addGap(21, 21, 21))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Elige_archivo)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 96, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Elige_archivo)
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(Compilar)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addComponent(Btn_Compilar)
+                .addGap(33, 33, 33))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void Elige_archivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Elige_archivoActionPerformed
-        Scanner entrada = null;
+
         JFileChooser chooser = new JFileChooser();
         chooser.showOpenDialog(this);
         String ruta = chooser.getSelectedFile().getAbsolutePath();
         File archivo = new File(ruta);
-        String cadena="";
-        try {
-            entrada = new Scanner(archivo);
-            while (entrada.hasNext()) {
-                 cadena+=entrada.nextLine();
+        archivo = chooser.getSelectedFile();
+        String aux = "";
+        String texto = "";
+        if (archivo != null) {
+            FileReader archivos = null;
+            try {
+                archivos = new FileReader(archivo);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            BufferedReader lee = new BufferedReader(archivos);
+            try {
+                while ((aux = lee.readLine()) != null) {
+                    texto += aux + "\n";
+                }
+                Panel_codigo.setText(texto);
+            } catch (IOException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            try {
+                lee.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            //JOptionPane.showMessageDialog(null,""+"\nNo se ha encontrado el archivo", "Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+
+        /*try {
+            Reader lector = new BufferedReader(new FileReader(cadena));
+            Lexer lexer = new Lexer(lector);
+            String resultado="";
+            while (true) {                
+                Tokens tokens= lexer.yylex();
+                if (tokens==null) {
+                    
+                    return;
+
+                }
+                switch(tokens){
+                case ERROR:
+                    resultado+="simbolo no encontrado\n";
+                    break;
+                case ID:
+                    resultado+=tokens.name();
+                    break;
+                case IF:
+                    System.out.println("if");
+                    resultado+="if";
+                    break;
+                    default:
+                        break;
+                }
+                Text_final.setText(resultado);
             }
         } catch (FileNotFoundException ex) {
-        }
-        Resultado.setText(cadena);
-        //minuto 14.58 primer video
+            Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+
     }//GEN-LAST:event_Elige_archivoActionPerformed
+
+    private void Btn_CompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_CompilarActionPerformed
+        try {
+            Reader lector = new BufferedReader(new FileReader(archivo));
+            Lexer lexer = new Lexer(lector);
+            String resultado = "";
+            while (true) {
+                Tokens tokens = lexer.yylex();
+                if (tokens == null) {
+
+                    return;
+
+                }
+                switch (tokens) {
+                    case ERROR:
+                        resultado += "simbolo no encontrado\n";
+                        break;
+                    case AND:
+                        resultado += "TOKEN_AND\n";
+                        break;
+                    case ASIGNACCION:
+                        resultado += "TOKEN_ASIGNACION\n";
+                        break;
+
+                    case DIGITO:
+                        resultado += "TOKEN_DIGITO\n";
+                        break;
+                    case IF:
+                        resultado += "TOKEN_IF\n";
+                        break;
+                    case CASE:
+                        resultado += "TOKEN_CASE\n";
+                        break;
+                    case MAIN:
+                        resultado += "TOKEN_MAIN\n";
+                        break;
+                    case BOOLEAN:
+                        resultado += "TOKEN_BOOLEAN\n";
+                        break;
+                    case CHAR:
+                        resultado += "TOKEN_CHAR\n";
+                        break;
+                    case COMILLA:
+                        resultado += "TOKEN_COMILLA\n";
+                        break;
+                    case OPMULTI:
+                        resultado += "TOKEN_OPMULTI\n";
+                        break;
+                    case PUNTOCOMA:
+                        resultado += "TOKEN_PUNTOCOMA\n";
+                        break;
+                    case DEFINIR:
+                        resultado += "TOKEN_DEFINIR\n";
+                        break;
+                    case ENDCASE:
+                        resultado += "TOKEN_ENDCASE\n";
+                        break;
+                    case ELSE:
+                        resultado += "TOKEN_ELSE\n";
+                        break;
+                    case THEN:
+                        resultado += "TOKEN_THEN\n";
+                        break;
+                    case PARENTESISI:
+                        resultado += "TOKEN_PARENTESISI\n";
+                        break;
+                    case SWITCH:
+                        resultado += "TOKEN_SWITCH\n";
+                        break;
+                    case OR:
+                        resultado += "TOKEN_OR\n";
+                        break;
+                    case DIGITOFLOAT:
+                        resultado += "TOKEN_DIGITOFLOAT\n";
+                        break;
+                    case WHILE:
+                        resultado += "TOKEN_WHILE\n";
+                        break;
+                    case PARENTESISD:
+                        resultado += "TOKEN_PARENTESIS\n";
+                        break;
+                    case INT:
+                        resultado += "TOKEN_INT\n";
+                        break;
+                    case SALTOLINEA:
+                        resultado += "TOKEN_SALTOLINEA \n";
+                        break;
+                    case FOR:
+                        resultado += "TOKEN_FOR \n";
+                        break;
+                    case IFELSE:
+                        resultado += "TOKEN_IFELSE \n";
+                        break;
+                    case OPADICION:
+                        resultado += "TOKEN_OPADICION \n";
+                        break;
+                    case OPREL:
+                        resultado += "TOKEN_OPREL\n";
+                        break;
+                    case LLAVEDER:
+                        resultado += "TOKEN_LLAVEDER\n";
+                        break;
+                    case LLAVEIZ:
+                        resultado += "TOKEN_LLAVEIZ\n";
+                        break;
+                    case IGUAL:
+                        resultado += "TOKEN_IGUAL\n";
+                        break;
+                    case Reservadas:
+                        resultado += "TOKEN_Reservadas\n";
+                        break;
+                    case ID:
+                        resultado += "TOKEN_ID\n";
+                        break;
+
+                    default:
+                        resultado += lexer.yylex().name() + "\n";
+                        break;
+                }
+                Text_final.setText(resultado);
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_Btn_CompilarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -137,9 +342,12 @@ public class MAIN extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Compilar;
+    private javax.swing.JButton Btn_Compilar;
     private javax.swing.JButton Elige_archivo;
-    private javax.swing.JTextArea Resultado;
+    private javax.swing.JTextArea Panel_codigo;
+    private javax.swing.JTextArea Text_final;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
+File archivo = new File("C:\\Users\\User\\Desktop\\CompiladorLenguajePropio\\Compilador_Propio\\Prueba1.txt");
 }
