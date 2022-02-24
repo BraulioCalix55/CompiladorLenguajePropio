@@ -14,7 +14,7 @@ ESPACIO = [" "]
 COMILLA = \"
 DIGITOFLOAT = ([0-9]*[.])?[0-9]+
 COMA = ,
-ERROR=error
+ERROR=Error
 MAIN=Main
 IGUAL = :=?
 PUNTOCOMA = ;
@@ -23,6 +23,7 @@ PARENTESISD = ")"
 LLAVEIZ = "{"
 LLAVEDER = "}"
 SALTOLINEA = \n|\r|\n\r|\t|{ESPACIO}
+COMPARACION= "=?"
 AND = &
 OR = "|"
 OPREL = <|>|<=|>=|=
@@ -34,7 +35,7 @@ IFELSE = Ifel
 THEN = Then
 FOR =For
 WHILE=While
-SWITCH=switch
+SWITCH=Switch
 CASE=Cas
 MAIN=Main
 ENDCASE=EndCas
@@ -51,6 +52,7 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
 <YYINITIAL>{
     {IF}            {return IF;}
     {PUNTOCOMA}     {return PUNTOCOMA;}
+    {COMPARACION}   {return COMPARACION;}
     {COMA}          {return COMA;}
     {IGUAL}         {return IGUAL;}
     {MAIN}          {return MAIN;}

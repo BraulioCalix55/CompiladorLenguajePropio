@@ -1,1 +1,4 @@
-If hoas 45 hola If * * hola = Cas For If cosa Then Ifel
+If hoas 45 hola If *
+<- For Cas Ifel moneda
+cas
+=?
