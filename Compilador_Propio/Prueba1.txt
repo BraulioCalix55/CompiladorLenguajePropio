@@ -1,4 +1,10 @@
-If hoas 45 hola If *
-<- For Cas Ifel moneda
-cas
-=?
+Main (){	
+	Int numero <--4
+	Int numero1 <--7
+	~~ prueba comentario
+	Int numero2 <-- numero + numero1
+	Sout("la suma es: "-> numero2)
+	For(numero::numero1){
+		Sout(numero)
+	}
+}
