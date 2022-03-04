@@ -1,0 +1,32 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.*;
+import java.io.*;
+
+parser code {:
+private Symbol s;
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+    public Symbol getS(){
+        return this.s;
+}
+
+:} ;
+terminal TKN_PUNTOCOMA,TKN_COMPARACION,TKN_FUNCION,TKN_COMA,TKN_IGUAL ,TKN_MAIN ,TKN_OR ,TKN_IMPRIMIR ;
+terminal TKN_DIGITO,TKN_IF ,TKN_DIGITOFLOAT ,TKN_PARENTESISI ,TKN_PARENTESISD ,TKN_LLAVEIZ ,TKN_LLAVEDER ,TKN_ERROR; 
+terminal TKN_COMILLA ,TKN_AND ,TKN_OPADICION ,TKN_OPREL ,TKN_OPMULTI ,TKN_ELSE ,TKN_THEN ,TKN_FOR ,TKN_WHILE ;
+terminal TKN_DOSPUNTOS, TKN_SWITCH, TKN_CASE ,TKN_ENDCASE ,TKN_DEFINIR ,TKN_INT ,TKN_CHAR ,TKN_BOOLEAN ,TKN_ASIGNACCION,TKN_ID;
+non terminal INICIO, STATEMENTS;
+
+start with INICIO;
+
+INICIO ::= TKN_MAIN TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER
+;
+
+STATEMENTS ::= 
+    TKN_INT TKN_ID TKN_DOSPUNTOS 
+    |TKN_INT TKN_ID TKN_DIGITO
+;

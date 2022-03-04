@@ -22,6 +22,8 @@ public enum Tokens {
     PARENTESISI,
     PARENTESISD,
     LLAVEIZ,
+    FUNCION,
+    DOSPUNTOS,
     LLAVEDER,
     COMENTARIOA,
     COMENTARIOC,

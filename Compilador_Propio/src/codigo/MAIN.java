@@ -14,6 +14,7 @@ import java.io.Reader;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java_cup.Lexer;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -133,8 +134,7 @@ public class MAIN extends javax.swing.JFrame {
             try {
                 archivos = new FileReader(archivo);
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                }
 
             BufferedReader lee = new BufferedReader(archivos);
             try {
@@ -144,51 +144,15 @@ public class MAIN extends javax.swing.JFrame {
                 Panel_codigo.setText(texto);
                 codigoabierto=true;
             } catch (IOException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             try {
                 lee.close();
             } catch (IOException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             //JOptionPane.showMessageDialog(null,""+"\nNo se ha encontrado el archivo", "Advertencia",JOptionPane.WARNING_MESSAGE);
         }
-
-        /*try {
-            Reader lector = new BufferedReader(new FileReader(cadena));
-            Lexer lexer = new Lexer(lector);
-            String resultado="";
-            while (true) {                
-                Tokens tokens= lexer.yylex();
-                if (tokens==null) {
-                    
-                    return;
-
-                }
-                switch(tokens){
-                case ERROR:
-                    resultado+="simbolo no encontrado\n";
-                    break;
-                case ID:
-                    resultado+=tokens.name();
-                    break;
-                case IF:
-                    System.out.println("if");
-                    resultado+="if";
-                    break;
-                    default:
-                        break;
-                }
-                Text_final.setText(resultado);
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-
     }//GEN-LAST:event_Elige_archivoActionPerformed
 
     private void Btn_CompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_CompilarActionPerformed
@@ -196,133 +160,9 @@ public class MAIN extends javax.swing.JFrame {
             try {
                 Reader lector = new BufferedReader(new FileReader(archivo));
                 Lexer lexer = new Lexer(lector);
+                parser p = new parser(lexer);
                 String resultado = "";
-                while (true) {
-                    Tokens tokens = lexer.yylex();
-                    if (tokens == null) {
-
-                        return;
-
-                    }
-                    switch (tokens) {
-                        case ERROR:
-                            resultado += "ERROR, SE INGRESÓ UN CARACTER NO ESPERADO: \n";;
-                            break;
-                        case AND:
-                            resultado += "TOKEN_AND\n";
-                            break;
-                        case ASIGNACCION:
-                            resultado += "TOKEN_ASIGNACION\n";
-                            break;
-                        case IMPRIMIR:
-                            resultado += "TOKEN_IMPRIMIR\n";
-                            break;
-                        case DIGITO:
-                            resultado += "TOKEN_DIGITO\n";
-                            break;
-                        case IF:
-                            resultado += "TOKEN_IF\n";
-                            break;
-                        case CASE:
-                            resultado += "TOKEN_CASE\n";
-                            break;
-                        case MAIN:
-                            //resultado+=lexer.lexeme+"\n";
-                            resultado += "TOKEN_MAIN\n";
-                            break;
-                        case BOOLEAN:
-                            resultado += "TOKEN_BOOLEAN\n";
-                            break;
-                        case CHAR:
-                            resultado += "TOKEN_CHAR\n";
-                            break;
-                        case COMILLA:
-                            resultado += "TOKEN_COMILLA\n";
-                            break;
-                        case OPMULTI:
-                            resultado += "TOKEN_OPMULTI\n";
-                            break;
-                        case PUNTOCOMA:
-                            resultado += "TOKEN_PUNTOCOMA\n";
-                            break;
-                        case DEFINIR:
-                            resultado += "TOKEN_DEFINIR\n";
-                            break;
-                        case ENDCASE:
-                            resultado += "TOKEN_ENDCASE\n";
-                            break;
-                        case ELSE:
-                            resultado += "TOKEN_ELSE\n";
-                            break;
-                        case THEN:
-                            resultado += "TOKEN_THEN\n";
-                            break;
-                        case PARENTESISI:
-                            resultado += "TOKEN_PARENTESISI\n";
-                            break;
-                        case SWITCH:
-                            resultado += "TOKEN_SWITCH\n";
-                            break;
-                        case OR:
-                            resultado += "TOKEN_OR\n";
-                            break;
-                        case DIGITOFLOAT:
-                            resultado += "TOKEN_DIGITOFLOAT\n";
-                            break;
-                        case WHILE:
-                            resultado += "TOKEN_WHILE\n";
-                            break;
-                        case PARENTESISD:
-                            resultado += "TOKEN_PARENTESISD\n";
-                            break;
-                        case INT:
-                            resultado += "TOKEN_INT\n";
-                            break;
-                        case SALTOLINEA:
-                            resultado += "TOKEN_SALTOLINEA \n";
-                            break;
-                        case FOR:
-                            resultado += "TOKEN_FOR \n";
-                            break;
-                        case OPADICION:
-                            resultado += "TOKEN_OPADICION \n";
-                            break;
-                        case OPREL:
-                            resultado += "TOKEN_OPREL\n";
-                            break;
-                        case LLAVEDER:
-                            resultado += "TOKEN_LLAVEDER\n";
-                            break;
-                        case LLAVEIZ:
-                            resultado += "TOKEN_LLAVEIZ\n";
-                            break;
-                        case IGUAL:
-                            resultado += "TOKEN_IGUAL\n";
-                            break;
-                        case Reservadas:
-                            resultado += "TOKEN_Reservadas\n";
-                            break;
-                        case ID:
-                            resultado += "TOKEN_ID\n";
-                            break;
-                        case COMPARACION:
-                            resultado += "TOKEN_COMPARACION\n";
-                            break;
-                        case COMENTARIOA:
-                            resultado += "TOKEN_COMENTARIO_APERTURA\n";
-                            break;
-                        
-                        case COMENTARIOC:
-                            resultado += "TOKEN_COMENTARIO_CERRADURA\n";
-                            break;
-                        case COMENTARIOSI:
-                            resultado+="TOKEN_COMENTARIO_SIMPLE\n ";
-                        default:
-                            resultado += "ERROR, SE INGRESÓ UN CARACTER NO ESPERADO: "+lexer.yytext() + "\n";
-                            break;
-                    }
-                    Text_final.setText(resultado);
-                }
+                
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
