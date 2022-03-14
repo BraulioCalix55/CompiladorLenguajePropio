@@ -11,12 +11,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.Lexer;
+import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import jdk.nashorn.internal.runtime.regexp.joni.Syntax;
 
 /**
  *
@@ -134,7 +137,7 @@ public class MAIN extends javax.swing.JFrame {
             try {
                 archivos = new FileReader(archivo);
             } catch (FileNotFoundException ex) {
-                }
+            }
 
             BufferedReader lee = new BufferedReader(archivos);
             try {
@@ -142,7 +145,7 @@ public class MAIN extends javax.swing.JFrame {
                     texto += aux + "\n";
                 }
                 Panel_codigo.setText(texto);
-                codigoabierto=true;
+                codigoabierto = true;
             } catch (IOException ex) {
             }
 
@@ -156,20 +159,25 @@ public class MAIN extends javax.swing.JFrame {
     }//GEN-LAST:event_Elige_archivoActionPerformed
 
     private void Btn_CompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_CompilarActionPerformed
-        if (codigoabierto==true) {
+        if (codigoabierto == true) {
+            LexerCup lexer;
+            parser p=null;
             try {
-                Reader lector = new BufferedReader(new FileReader(archivo));
-                Lexer lexer = new Lexer(lector);
-                parser p = new parser(lexer);
-                String resultado = "";
-                
+                lexer = new LexerCup((new FileReader(archivo)));
+                System.out.println("antes del parse");
+                p = new parser(lexer);
+                System.out.println("en medio");
+                p.parse();
+                System.out.println("despues del parse");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Symbol sym = p.getS();
+                System.out.println("error en "+(sym.right+1)+" Collum: "+ (sym.left+1)+ ", tecto: "+sym.value);
             }
-        }else{
-            JOptionPane.showMessageDialog(this,"no se ha abierto ningun archivo valido");
+
+        } else {
+            JOptionPane.showMessageDialog(this, "no se ha abierto ningun archivo valido");
         }
     }//GEN-LAST:event_Btn_CompilarActionPerformed
 

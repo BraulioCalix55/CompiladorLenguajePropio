@@ -44,12 +44,14 @@ COMPARACION= "=?"
 AND = &
 OR = "|"
 OPREL = <|>|<=|>=|=
-FUNCION= VoidFun
+FUNCION=Fun
 OPADICION = [+-]
 OPMULTI = [*/]
 IF = "If"
 ELSE = Else
 THEN = Then
+VBOOLTRUE= TRUE
+VBOOLFALSE= FALSE
 FOR =For
 WHILE=While
 SWITCH=Switch
@@ -70,6 +72,8 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
 <YYINITIAL>{
     {IF}            {return new Symbol(sym.TKN_IF,yyline+1 ,yycolumn+1 ,yytext());}
     {AND}           {return new Symbol(sym.TKN_AND          ,yyline+1 ,yycolumn+1 ,yytext());}
+    {VBOOLTRUE}     {return new Symbol(sym.TKN_TRUE         ,yyline+1,yycolumn+1,yytext());}
+    {VBOOLFALSE}    {return new Symbol(sym.TKN_FALSE        ,yyline+1,yycolumn+1,yytext());}
     {PUNTOCOMA}     {return new Symbol(sym.TKN_PUNTOCOMA    ,yyline+1 ,yycolumn+1 ,yytext());}
     {DOSPUNTOS}     {return new Symbol(sym.TKN_DOSPUNTOS    ,yyline+1 ,yycolumn+1 ,yytext());}
     {COMPARACION}   {return new Symbol(sym.TKN_COMPARACION  ,yyline+1 ,yycolumn+1 ,yytext());}
@@ -82,6 +86,7 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
     {DIGITO}        {return new Symbol(sym.TKN_DIGITO       ,yyline+1 ,yycolumn+1 ,yytext());}
     {DIGITOFLOAT}   {return new Symbol(sym.TKN_DIGITOFLOAT  ,yyline+1 ,yycolumn+1 ,yytext());}
     {PARENTESISI}   {return new Symbol(sym.TKN_PARENTESISI  ,yyline+1 ,yycolumn+1 ,yytext());}
+    {LETRA}         {return new Symbol(sym.TKN_LETRA        ,yyline+1 ,yycolumn+1 ,yytext());}
     {PARENTESISD}   {return new Symbol(sym.TKN_PARENTESISD  ,yyline+1 ,yycolumn+1 ,yytext());}
     {LLAVEIZ}       {return new Symbol(sym.TKN_LLAVEIZ      ,yyline+1 ,yycolumn+1 ,yytext());}
     {LLAVEDER}      {return new Symbol(sym.TKN_LLAVEDER     ,yyline+1 ,yycolumn+1 ,yytext());}
