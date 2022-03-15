@@ -33,7 +33,7 @@ ERROR=Error
 MAIN=Main
 IGUAL = :=?
 PUNTOCOMA = ;
-DOSPUNTOS= ::
+DOSPUNTOS= "::"
 PARENTESISI = "("
 PARENTESISD = ")"
 LLAVEIZ = "{"
@@ -55,12 +55,14 @@ VBOOLFALSE= FALSE
 FOR =For
 WHILE=While
 SWITCH=Switch
+VOID=Vd
 CASE=Cas
 ENDCASE=EndCas
 DEFINIR=Def
 INT=Int
 CHAR=Char
 IMPRIMIR=Sout
+RETURN=return
 BOOLEAN=Bool
 ASIGNACCION= <--
 ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
@@ -72,10 +74,12 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
 <YYINITIAL>{
     {IF}            {return new Symbol(sym.TKN_IF,yyline+1 ,yycolumn+1 ,yytext());}
     {AND}           {return new Symbol(sym.TKN_AND          ,yyline+1 ,yycolumn+1 ,yytext());}
-    {VBOOLTRUE}     {return new Symbol(sym.TKN_TRUE         ,yyline+1,yycolumn+1,yytext());}
-    {VBOOLFALSE}    {return new Symbol(sym.TKN_FALSE        ,yyline+1,yycolumn+1,yytext());}
+    {VBOOLTRUE}     {return new Symbol(sym.TKN_TRUE         ,yyline+1 ,yycolumn+1 ,yytext());}
+    {VBOOLFALSE}    {return new Symbol(sym.TKN_FALSE        ,yyline+1 ,yycolumn+1 ,yytext());}
     {PUNTOCOMA}     {return new Symbol(sym.TKN_PUNTOCOMA    ,yyline+1 ,yycolumn+1 ,yytext());}
     {DOSPUNTOS}     {return new Symbol(sym.TKN_DOSPUNTOS    ,yyline+1 ,yycolumn+1 ,yytext());}
+    {VOID}          {return new Symbol(sym.TKN_VOID         ,yyline+1 ,yycolumn+1 ,yytext());}
+    {RETURN}        {return new Symbol(sym.TKN_RETURN       ,yyline+1 ,yycolumn+1 ,yytext());}
     {COMPARACION}   {return new Symbol(sym.TKN_COMPARACION  ,yyline+1 ,yycolumn+1 ,yytext());}
     {FUNCION}       {return new Symbol(sym.TKN_FUNCION      ,yyline+1 ,yycolumn+1 ,yytext());}
     {COMA}          {return new Symbol(sym.TKN_COMA         ,yyline+1 ,yycolumn+1 ,yytext());}

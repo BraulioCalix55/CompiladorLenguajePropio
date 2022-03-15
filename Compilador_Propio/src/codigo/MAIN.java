@@ -173,7 +173,7 @@ public class MAIN extends javax.swing.JFrame {
                 Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
                 Symbol sym = p.getS();
-                System.out.println("error en "+(sym.right+1)+" Collum: "+ (sym.left+1)+ ", tecto: "+sym.value);
+                System.out.println("error en columna "+(sym.right)+" fila: "+ (sym.left)+ ", texto: "+sym.toString());
             }
 
         } else {

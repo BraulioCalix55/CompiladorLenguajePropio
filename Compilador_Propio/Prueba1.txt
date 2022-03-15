@@ -1,3 +1,6 @@
 Main {
-	Int num 
+Int prime <--2
+For(14::40){
+	Int num <--5
+	}
 }
