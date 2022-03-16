@@ -28,7 +28,7 @@ COMENTARIOA= "*-"
 COMENTARIOC= "-*"
 COMENTARIOSI="~~"
 DIGITOFLOAT = ([0-9]*[.])?[0-9]+
-COMA = ,
+COMA = ","
 ERROR=Error
 MAIN=Main
 IGUAL = :=?
@@ -40,7 +40,7 @@ LLAVEIZ = "{"
 LLAVEDER = "}"
 SALTOLINEA = \n|\r|\n\r|\t|{ESPACIO}
 SALTO=\n
-COMPARACION= "=?"
+
 AND = &
 OR = "|"
 OPREL = <|>|<=|>=|=
@@ -80,7 +80,6 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
     {DOSPUNTOS}     {return new Symbol(sym.TKN_DOSPUNTOS    ,yyline+1 ,yycolumn+1 ,yytext());}
     {VOID}          {return new Symbol(sym.TKN_VOID         ,yyline+1 ,yycolumn+1 ,yytext());}
     {RETURN}        {return new Symbol(sym.TKN_RETURN       ,yyline+1 ,yycolumn+1 ,yytext());}
-    {COMPARACION}   {return new Symbol(sym.TKN_COMPARACION  ,yyline+1 ,yycolumn+1 ,yytext());}
     {FUNCION}       {return new Symbol(sym.TKN_FUNCION      ,yyline+1 ,yycolumn+1 ,yytext());}
     {COMA}          {return new Symbol(sym.TKN_COMA         ,yyline+1 ,yycolumn+1 ,yytext());}
     {IGUAL}         {return new Symbol(sym.TKN_IGUAL        ,yyline+1 ,yycolumn+1 ,yytext());}
@@ -96,10 +95,9 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
     {LLAVEDER}      {return new Symbol(sym.TKN_LLAVEDER     ,yyline+1 ,yycolumn+1 ,yytext());}
     {ERROR}         {return new Symbol(sym.TKN_ERROR        ,yyline+1 ,yycolumn+1 ,yytext());}
     {COMILLA}       {return new Symbol(sym.TKN_COMILLA      ,yyline+1 ,yycolumn+1 ,yytext());}
-    {AND}           {return new Symbol(sym.TKN_AND          ,yyline+1 ,yycolumn+1 ,yytext());}
     {OPADICION}     {return new Symbol(sym.TKN_OPADICION    ,yyline+1 ,yycolumn+1 ,yytext());}
     {OPREL}         {return new Symbol(sym.TKN_OPREL        ,yyline+1 ,yycolumn+1 ,yytext());}
-    {OPMULTI}       {return new Symbol(sym.TKN_OPMULTI      ,yyline+1 ,yycolumn+1 ,yytext());}
+    {OPMULTI}       {return new Symbol(sym.TKN_MULTI        ,yyline+1 ,yycolumn+1 ,yytext());}
     {ELSE}          {return new Symbol(sym.TKN_ELSE         ,yyline+1 ,yycolumn+1 ,yytext());}
     {THEN}          {return new Symbol(sym.TKN_THEN         ,yyline+1 ,yycolumn+1 ,yytext());}
     {FOR}           {return new Symbol(sym.TKN_FOR          ,yyline+1 ,yycolumn+1 ,yytext());}
