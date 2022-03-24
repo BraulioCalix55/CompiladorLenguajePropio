@@ -58,7 +58,7 @@ SWITCH=Switch
 VOID=Vd
 CASE=Cas
 ENDCASE=EndCas
-DEFINIR=Def
+DEFAULT=Def
 INT=Int
 CHAR=Char
 IMPRIMIR=Sout
@@ -105,7 +105,7 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
     {SWITCH}        {return new Symbol(sym.TKN_SWITCH       ,yyline+1 ,yycolumn+1 ,yytext());}
     {CASE}          {return new Symbol(sym.TKN_CASE         ,yyline+1 ,yycolumn+1 ,yytext());}
     {ENDCASE}       {return new Symbol(sym.TKN_ENDCASE      ,yyline+1 ,yycolumn+1 ,yytext());}
-    {DEFINIR}       {return new Symbol(sym.TKN_DEFINIR      ,yyline+1 ,yycolumn+1 ,yytext());}
+    {DEFAULT}       {return new Symbol(sym.TKN_DEFAULT      ,yyline+1 ,yycolumn+1 ,yytext());}
     {INT}           {return new Symbol(sym.TKN_INT          ,yyline+1 ,yycolumn+1 ,yytext());}
     {CHAR}          {return new Symbol(sym.TKN_CHAR         ,yyline+1 ,yycolumn+1 ,yytext());}
     {BOOLEAN}       {return new Symbol(sym.TKN_BOOLEAN      ,yyline+1 ,yycolumn+1 ,yytext());}

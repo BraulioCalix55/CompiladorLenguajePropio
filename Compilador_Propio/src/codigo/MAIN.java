@@ -228,3 +228,7 @@ public class MAIN extends javax.swing.JFrame {
     boolean codigoabierto = false;
     File archivo = new File("C:\\Users\\User\\Desktop\\CompiladorLenguajePropio\\Compilador_Propio\\Prueba1.txt");
 }
+
+/*comandos para ejectutar
+    java
+*/

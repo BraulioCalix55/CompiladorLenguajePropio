@@ -896,7 +896,7 @@ class LexerCup implements java_cup.runtime.Scanner {
             // fall through
           case 69: break;
           case 27:
-            { return new Symbol(sym.TKN_DEFINIR      ,yyline+1 ,yycolumn+1 ,yytext());
+            { return new Symbol(sym.TKN_DEFAULT      ,yyline+1 ,yycolumn+1 ,yytext());
             }
             // fall through
           case 70: break;
