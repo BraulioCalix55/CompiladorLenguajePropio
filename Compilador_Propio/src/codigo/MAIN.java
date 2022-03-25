@@ -230,5 +230,7 @@ public class MAIN extends javax.swing.JFrame {
 }
 
 /*comandos para ejectutar
-    java
+    jflex LexerCup.flex
+java -jar java-cuo-11a.jar Sintax.cup
+
 */

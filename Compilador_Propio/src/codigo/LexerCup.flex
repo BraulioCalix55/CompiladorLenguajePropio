@@ -29,10 +29,9 @@ COMENTARIOC= "-*"
 COMENTARIOSI="~~"
 DIGITOFLOAT = ([0-9]*[.])?[0-9]+
 COMA = ","
-ERROR=Error
 MAIN=Main
 IGUAL = :=?
-PUNTOCOMA = ;
+
 DOSPUNTOS= "::"
 PARENTESISI = "("
 PARENTESISD = ")"
@@ -48,8 +47,7 @@ FUNCION=Fun
 OPADICION = [+-]
 OPMULTI = [*/]
 IF = "If"
-ELSE = Else
-THEN = Then
+
 VBOOLTRUE= TRUE
 VBOOLFALSE= FALSE
 FOR =For
@@ -62,7 +60,7 @@ DEFAULT=Def
 INT=Int
 CHAR=Char
 IMPRIMIR=Sout
-RETURN=return
+RETURN=Return
 BOOLEAN=Bool
 ASIGNACCION= <--
 ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
@@ -76,7 +74,6 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
     {AND}           {return new Symbol(sym.TKN_AND          ,yyline+1 ,yycolumn+1 ,yytext());}
     {VBOOLTRUE}     {return new Symbol(sym.TKN_TRUE         ,yyline+1 ,yycolumn+1 ,yytext());}
     {VBOOLFALSE}    {return new Symbol(sym.TKN_FALSE        ,yyline+1 ,yycolumn+1 ,yytext());}
-    {PUNTOCOMA}     {return new Symbol(sym.TKN_PUNTOCOMA    ,yyline+1 ,yycolumn+1 ,yytext());}
     {DOSPUNTOS}     {return new Symbol(sym.TKN_DOSPUNTOS    ,yyline+1 ,yycolumn+1 ,yytext());}
     {VOID}          {return new Symbol(sym.TKN_VOID         ,yyline+1 ,yycolumn+1 ,yytext());}
     {RETURN}        {return new Symbol(sym.TKN_RETURN       ,yyline+1 ,yycolumn+1 ,yytext());}
@@ -93,13 +90,10 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
     {PARENTESISD}   {return new Symbol(sym.TKN_PARENTESISD  ,yyline+1 ,yycolumn+1 ,yytext());}
     {LLAVEIZ}       {return new Symbol(sym.TKN_LLAVEIZ      ,yyline+1 ,yycolumn+1 ,yytext());}
     {LLAVEDER}      {return new Symbol(sym.TKN_LLAVEDER     ,yyline+1 ,yycolumn+1 ,yytext());}
-    {ERROR}         {return new Symbol(sym.TKN_ERROR        ,yyline+1 ,yycolumn+1 ,yytext());}
     {COMILLA}       {return new Symbol(sym.TKN_COMILLA      ,yyline+1 ,yycolumn+1 ,yytext());}
     {OPADICION}     {return new Symbol(sym.TKN_OPADICION    ,yyline+1 ,yycolumn+1 ,yytext());}
     {OPREL}         {return new Symbol(sym.TKN_OPREL        ,yyline+1 ,yycolumn+1 ,yytext());}
     {OPMULTI}       {return new Symbol(sym.TKN_MULTI        ,yyline+1 ,yycolumn+1 ,yytext());}
-    {ELSE}          {return new Symbol(sym.TKN_ELSE         ,yyline+1 ,yycolumn+1 ,yytext());}
-    {THEN}          {return new Symbol(sym.TKN_THEN         ,yyline+1 ,yycolumn+1 ,yytext());}
     {FOR}           {return new Symbol(sym.TKN_FOR          ,yyline+1 ,yycolumn+1 ,yytext());}
     {WHILE}         {return new Symbol(sym.TKN_WHILE        ,yyline+1 ,yycolumn+1 ,yytext());}
     {SWITCH}        {return new Symbol(sym.TKN_SWITCH       ,yyline+1 ,yycolumn+1 ,yytext());}

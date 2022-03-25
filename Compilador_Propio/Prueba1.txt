@@ -3,4 +3,24 @@ Int prime <--2
 For(14::40){
 	Int num <--5
 	}
+	Switch( NUM){
+	Cas G::
+	Sout("SAa")
+	EndCas
+	Cas A::
+	Sout("SAa")
+	EndCas
+	Cas c::
+	Sout("SAa")
+	EndCas
+	Cas B::
+	Sout("SAa")
+	EndCas
+	Def:: AS
+	Sout("43")
+	}
+}
+Fun Vd suma (sa,sb,sc){
+Int suma <--5
+Return suma
 }
