@@ -157,12 +157,12 @@ public class MAIN extends javax.swing.JFrame {
                 Panel_codigo.setText(texto);
                 codigoabierto = true;
             } catch (IOException ex) {
-                System.out.println("no eligio ningun archivo");
+                
             }
             try {
                 lee.close();
             } catch (IOException ex) {
-                System.out.println("no eligio ningun archivo");
+                
             }
         } else {
             JOptionPane.showMessageDialog(null, "" + "\nNo se ha encontrado el archivo", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -204,7 +204,7 @@ public class MAIN extends javax.swing.JFrame {
                 for (int i = 0; i < p.gramas.size(); i++) {
                     Text_final.append(p.gramas.get(i).toString() + "\n");
                 }
-                String formato = "edge [color=red];" + hacerDFS(p.raiz);
+                String formato = "edge [color=purple];" + hacerDFS(p.raiz);
                 p.raiz.exportarArbol(formato, "AST");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);

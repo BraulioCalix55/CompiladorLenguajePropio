@@ -1,9 +1,41 @@
 Main {
 Sout("sasd")
+Float num <--5.6	
+Int mas <--5
+Sout("hola")
+Suma(asd,asd,asd)
+If(66<43){
+Char asd <-- a
+}
+~~holas
+For(5::8){
+	If(66 < 43){
+	Char asd <-- a
+	}
+
+}
+Switch(SUM){
+Cas asd ::
+	Int mas <--5
+EndCas
+Cas fdd ::
+	Int mas <--5
+EndCas
+Def::
+	Int mas <--5
+}
 Sout("merequeten")
 Int suma <--5
-Int sumna <--20
+Char letra<--a
+Bool blo<--TRUE
+HOLA(as,da,ed)
+Int sna <--20
+While(66 < 43){
+NEGRO(ASD,SDA,DAS)
+Sout("hola")
 }
-
-
-
+}
+Fun Vd suma(sa,dv){
+Sout("hola")
+Return Hola
+}

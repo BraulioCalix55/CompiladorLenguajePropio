@@ -21,15 +21,15 @@ ESPACIO = [" "]
 COMILLA = \"
 COMENTAR= "~~"
 DIGITOFLOAT = ([0-9]*[.])?[0-9]+
+FLOAT=Float
 COMA = ","
 MAIN=Main
-IGUAL = "?="
+IGUAL = :=
 DOSPUNTOS= "::"
 PARENTESISI = "("
 PARENTESISD = ")"
 LLAVEIZ = "{"
 LLAVEDER = "}"
-
 SALTOLINEA = \n|\r|\n\r|\t|{ESPACIO}
 AND = &
 OR = "|"
@@ -88,6 +88,7 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
     {ENDCASE}       {return new Symbol(sym.TKN_ENDCASE      ,yyline+1 ,yycolumn+1 ,yytext());}
     {DEFAULT}       {return new Symbol(sym.TKN_DEFAULT      ,yyline+1 ,yycolumn+1 ,yytext());}
     {INT}           {return new Symbol(sym.TKN_INT          ,yyline+1 ,yycolumn+1 ,yytext());}
+    {FLOAT}         {return new Symbol(sym.TKN_FLOAT          ,yyline+1 ,yycolumn+1 ,yytext());}
     {CHAR}          {return new Symbol(sym.TKN_CHAR         ,yyline+1 ,yycolumn+1 ,yytext());}
     {BOOLEAN}       {return new Symbol(sym.TKN_BOOLEAN      ,yyline+1 ,yycolumn+1 ,yytext());}
     {ASIGNACCION}   {return new Symbol(sym.TKN_ASIGNACCION  ,yyline+1 ,yycolumn+1 ,yytext());}
