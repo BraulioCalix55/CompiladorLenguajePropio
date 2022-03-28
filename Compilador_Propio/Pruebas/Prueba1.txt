@@ -1,0 +1,9 @@
+Main {
+Sout("sasd")
+Sout("merequeten")
+Int suma <--5
+Int sumna <--20
+}
+
+
+

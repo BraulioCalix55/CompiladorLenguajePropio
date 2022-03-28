@@ -6,40 +6,62 @@ import java.util.*;
 import java.io.*;
 
 parser code {:
-private Symbol s;
-    public void syntax_error(Symbol s){
-        this.s = s;
+     ArrayList gramas = new ArrayList();
+    public Nodo raiz;
+    public int cont = 0;
+    ArrayList errores=new ArrayList();
+    public Symbol s;
+    @Override
+    public void syntax_error (Symbol s){
+        if(s.left==-1){
+        }else{
+                errores.add("En la linea: " + (s.left) + " y Columna: " +(s.right)+ " con el simbolo= "+(s.value));
+    }
+}
+    @Override
+    public void unrecovered_syntax_error(Symbol s){
+    if(s.left==-1){
+    }else{
+        errores.add("Error desconocido, por favor revise la linea: " + (s.left ) + " y columna:  " + (s.right )+ "Con simbolo: "+s.value);
+    }    
     }
     public Symbol getS(){
         return this.s;
-}
-
+    }
 :} ;
 terminal TKN_FUNCION,TKN_COMA,TKN_IGUAL ,TKN_MAIN ,TKN_OR ,TKN_IMPRIMIR ;
 terminal TKN_DIGITO,TKN_IF ,TKN_DIGITOFLOAT ,TKN_WHILE,TKN_PARENTESISI ,TKN_PARENTESISD ,TKN_LLAVEIZ ,TKN_LLAVEDER ; 
 terminal TKN_COMILLA ,TKN_AND,TKN_OPADICION ,TKN_OPREL ,TKN_MULTI ,TKN_FOR ,TKN_VOID,TKN_RETURN;
 terminal TKN_DOSPUNTOS, TKN_SWITCH ,TKN_CASE ,TKN_ENDCASE ,TKN_DEFAULT,TKN_LETRA,TKN_FALSE,TKN_TRUE ,TKN_INT ,TKN_CHAR ,TKN_BOOLEAN ,TKN_ASIGNACCION,TKN_ID;
-non terminal INICIO,TIPOSW,PRUEBA,TIPOPRI, IMPRIMIR,WHILE,CASOSA,FUNCIONES,CASOS,FUNCION,TIPO,VALOR,STATEMENTS,LLAMADO,IF,FOR,SWITCH, CONDICION,CONDICIONP,LISTA_ARGS,OPCONDICION,DECLARACION;
+non terminal TIPOSW,TIPOPRI,CASOSA,CASOS,FUNCION,IF,WHILE,FOR,SWITCH,TIPO,VALOR,LLAMADO, CONDICION,CONDICIONP,LISTA_ARGS,OPCONDICION;
+non terminal Nodo INICIO,STATEMENTS,FUNCIONES,IMPRIMIR,DECLARACION;
 
 //GRAMATICA PARA EL MAIN Y DESPUES FUNCIONES
 start with INICIO;
-INICIO ::= TKN_MAIN TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER FUNCIONES
+INICIO ::=  TKN_MAIN:id TKN_LLAVEIZ STATEMENTS:b TKN_LLAVEDER FUNCIONES:d
+{:
+        parser.gramas.add("Bloque Main Reconocido satisfactoriamente");
+        System.out.println(id);
+        Nodo nodo = new Nodo(id.toString(),parser.cont);
+        parser.cont++;
+        nodo.addHijo(b);
+        parser.raiz=nodo;
+:}
+
 ;
 // FUNCIONES O NO DESPUES DEL MAIN
-FUNCIONES::= FUNCION FUNCIONES:s
+FUNCIONES::= FUNCION FUNCIONES
             |    
 ;
 //GRAMATICA PARA FUNCIONES
 
-FUNCION::= 
-{:System.out.println("DENTRO DE funcion");:}
-TKN_FUNCION TIPO TKN_ID TKN_PARENTESISI LISTA_ARGS TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_RETURN TKN_ID TKN_LLAVEDER
-
+FUNCION::= TKN_FUNCION TIPO TKN_ID TKN_PARENTESISI LISTA_ARGS TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_RETURN TKN_ID TKN_LLAVEDER {:parser.gramas.add("Una Funcion Reconocida satisfactoriamente");:}
+            |error TIPO TKN_ID  TKN_PARENTESISI LISTA_ARGS TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_RETURN TKN_ID TKN_LLAVEDER {:parser.errores.add("Falta poner 'Fun' ");:} 
+            |TKN_FUNCION TIPO error TKN_PARENTESISI LISTA_ARGS TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_RETURN TKN_ID TKN_LLAVEDER {:parser.errores.add("No se puso un ID valido de funcion");:} 
+            |TKN_FUNCION TIPO TKN_ID error LISTA_ARGS TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_RETURN TKN_ID TKN_LLAVEDER {:parser.errores.add("No se puso un '(' en funcion");:}
 ;
 //LLAMADO DE FUNCIONES
-LLAMADO::= 
-    {:System.out.println("DENTRO DE LLAMADO");:} 
-TKN_ID TKN_PARENTESISI LISTA_ARGS TKN_PARENTESISD
+LLAMADO::= TKN_ID TKN_PARENTESISI LISTA_ARGS TKN_PARENTESISD {:parser.gramas.add("Un Llamado de Funcion Reconocido satisfactoriamente");:}
 ;
 // TIPO PARA CUALQUIER COSA
 TIPO::=
@@ -48,63 +70,107 @@ TIPO::=
     |TKN_CHAR
     |TKN_BOOLEAN
     |TKN_DIGITOFLOAT
-    |TKN_ID
+    |error {:parser.errores.add("No se puso un tipo valido de funcion");:}
 ;
 //STATEMENTS!! OJO SIEMPRE AGREGAR NUEVAS GRAMATICAS PARA QUE NO TE TIRE LOS WARININGS
 STATEMENTS ::= 
-{:System.out.println("DENTRO DE statements");:} 
-           DECLARACION STATEMENTS:s
-            |FOR STATEMENTS:s
-            |IF STATEMENTS:s
-            |WHILE STATEMENTS:s
-            |LLAMADO STATEMENTS:s
-            |SWITCH STATEMENTS:s
-            |IMPRIMIR STATEMENTS:s
-            |
+            DECLARACION:i STATEMENTS:s       
+            {:
+                Nodo nodo = new Nodo("STATEMENT",parser.cont);
+                parser.cont++;
+                nodo.addHijo(i);
+                nodo.addHijo(s);
+                RESULT=nodo;
+            :}    
+            |FOR:i STATEMENTS:s
+           
+            |IF:i STATEMENTS:s
+            
+            |WHILE:i STATEMENTS:s
+            
+            |LLAMADO:i STATEMENTS:s
+            
+            |SWITCH:i STATEMENTS:s
+            
+            |IMPRIMIR:i STATEMENTS:s
+            {:
+                Nodo nodo = new Nodo("STATEMENT",parser.cont);
+                parser.cont++;
+                nodo.addHijo(i);
+                nodo.addHijo(s);
+                RESULT=nodo;
+            :}
+            |{:
+                    Nodo node = new Nodo("VACIO",parser.cont);
+                    parser.cont++;
+                    node.addHijo(new Nodo("VACIO",parser.cont++));
+                    parser.cont++;
+                    RESULT = node;
+                :}
 ;
 //BLOQUE IF
+
 IF::=   
-    {:System.out.println("DENTRO DE IF");:} 
-TKN_IF TKN_PARENTESISI CONDICION TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER
+TKN_IF TKN_PARENTESISI CONDICION TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS:s TKN_LLAVEDER {:
+    parser.gramas.add("Un Bloque IF Reconocido satisfactoriamente");
+    
+:}
+|error TKN_PARENTESISI CONDICION TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add("Falta poner 'IF' ");:}
+|TKN_IF error CONDICION TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add("Falta poner '(' ");:}
 ;
 //DECLARACIONES
 DECLARACION::=
-{:System.out.println("DENTRO DE DECLARACION");:} 
-    TKN_INT TKN_ID TKN_ASIGNACCION TKN_DIGITO
-    |TKN_BOOLEAN TKN_ID TKN_ASIGNACCION TKN_TRUE
-    |TKN_BOOLEAN TKN_ID TKN_ASIGNACCION TKN_FALSE
-    |TKN_CHAR  TKN_ID  TKN_ASIGNACCION TKN_LETRA
+    TKN_INT TKN_ID:i TKN_ASIGNACCION TKN_DIGITO:di
+    {:parser.gramas.add("Una Asignacion Reconocida satisfactoriamente");
+    Nodo nodo = new Nodo("DECLARACION",parser.cont);
+    parser.cont++;
+    nodo.addHijo(new Nodo(i.toString(),parser.cont));
+    parser.cont++;
+    nodo.addHijo(new Nodo("<--",parser.cont));
+    parser.cont++;    
+    nodo.addHijo(new Nodo(di.toString(),parser.cont));
+    parser.cont++;  
+    RESULT=nodo;
+    :}
+    |TKN_BOOLEAN TKN_ID TKN_ASIGNACCION TKN_TRUE {:parser.gramas.add("Una Asignacion Reconocida satisfactoriamente");:}
+    |TKN_BOOLEAN TKN_ID TKN_ASIGNACCION TKN_FALSE {:parser.gramas.add("Una Asignacion Reconocida satisfactoriamente");:}
+    |TKN_CHAR  TKN_ID  TKN_ASIGNACCION TKN_LETRA {:parser.gramas.add("Una Asignacion Reconocida satisfactoriamente");:}
 ;
+//tipo declaracion para aint bool bool y char y tipo de salida tkn_digito true false letra
 //BLOQUE FOOOR
 FOR ::=
-{:System.out.println("DENTRO DE FOR");:} 
-    TKN_FOR TKN_PARENTESISI TKN_DIGITO TKN_DOSPUNTOS TKN_DIGITO TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER
+    TKN_FOR TKN_PARENTESISI TKN_DIGITO TKN_DOSPUNTOS TKN_DIGITO TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER  {:parser.gramas.add("Un Bloque FOR Reconocido satisfactoriamente");:}
+    |error TKN_PARENTESISI TKN_DIGITO TKN_DOSPUNTOS TKN_DIGITO TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add(" Falta poner FOR ");:}
+    |TKN_FOR TKN_PARENTESISI error TKN_DOSPUNTOS TKN_DIGITO TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add(" Falta poner un valor de inicio en el for");:}
+    |TKN_FOR TKN_PARENTESISI TKN_DIGITO error TKN_DIGITO TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add(" Falta poner '::'en el for");:}
 ;
 
 //LISTA DE ARGUMENTOS
 LISTA_ARGS::= VALOR:v
-        | VALOR:v TKN_COMA LISTA_ARGS
-        |  
+        | VALOR:v TKN_COMA LISTA_ARGS  
 ;
 //bloque while
 WHILE::=
-{:System.out.println("DENTRO DE WHILE"); :} 
-TKN_WHILE:w TKN_PARENTESISI CONDICION TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER
+TKN_WHILE:w TKN_PARENTESISI CONDICION TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.gramas.add("Un Bloque While Reconocido satisfactoriamente");:}
 ;
 
 //bloque switch
 SWITCH::=
-    {:System.out.println("DENTRO DE SWITCH");:}
-TKN_SWITCH TKN_PARENTESISI TKN_ID TKN_PARENTESISD TKN_LLAVEIZ CASOSA TKN_LLAVEDER 
+    
+TKN_SWITCH TKN_PARENTESISI TIPOSW TKN_PARENTESISD TKN_LLAVEIZ {:parser.gramas.add("Un Bloque Switch Reconocido satisfactoriamente");:} CASOSA TKN_LLAVEDER  
+|error  TKN_PARENTESISI TIPOSW TKN_PARENTESISD TKN_LLAVEIZ {:parser.errores.add(" Falta el enunciado switch\n");:}
+|TKN_SWITCH error TIPOSW TKN_PARENTESISD TKN_LLAVEIZ {:parser.errores.add(" Falta un ( \n");:}
+|TKN_SWITCH TKN_PARENTESISI error TKN_PARENTESISD TKN_LLAVEIZ {:parser.errores.add(" no ingreso un tipo valido en el switch\n");:}
 ;
 TIPOSW::=
-    TKN_DIGITO
+    TKN_ID
     |TKN_LETRA
+    |TKN_DIGITO
 ;
 //CASOS
 CASOSA::=
-    {:System.out.println("DENTRO DE CASOSABB");:}
-    TKN_CASE TIPOSW TKN_DOSPUNTOS STATEMENTS TKN_ENDCASE CASOS
+    
+    TKN_CASE TIPOSW TKN_DOSPUNTOS STATEMENTS TKN_ENDCASE CASOS 
 ;
 //CASO SOLO, DEFAULT O VACIO
 CASOS::=
@@ -115,8 +181,18 @@ CASOS::=
 
 //IMPRIMIR
 IMPRIMIR::=
-{:System.out.println("DENTRO DE sout");:}
-TKN_IMPRIMIR TKN_PARENTESISI TKN_COMILLA TIPOPRI TKN_COMILLA TKN_PARENTESISD
+
+TKN_IMPRIMIR TKN_PARENTESISI TKN_COMILLA TIPOPRI TKN_COMILLA TKN_PARENTESISD 
+{:parser.gramas.add("Una Impresion Reconocida satisfactoriamente");
+    Nodo nodo = new Nodo("SOUT",parser.cont);
+    parser.cont++;
+    RESULT=nodo;
+:}
+|error TKN_PARENTESISI TKN_COMILLA TIPOPRI TKN_COMILLA TKN_PARENTESISD {:parser.errores.add(" falta un sout\n");:}
+|TKN_IMPRIMIR TKN_PARENTESISI error TIPOPRI TKN_COMILLA TKN_PARENTESISD{:parser.errores.add(" falta una '\n");:}
+|TKN_IMPRIMIR TKN_PARENTESISI TKN_COMILLA  TIPOPRI error TKN_PARENTESISD{:parser.errores.add(" falta una '\n");:}
+|TKN_IMPRIMIR error TKN_COMILLA TIPOPRI TKN_COMILLA TKN_PARENTESISD {:parser.errores.add(" falta un '(' \n");:}
+|TKN_IMPRIMIR TKN_PARENTESISI TKN_COMILLA TIPOPRI TKN_COMILLA error {:parser.errores.add(" falta un ')' \n");:}
 ;
 TIPOPRI::=
     TKN_DIGITO

@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +51,7 @@ public class MAIN extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         Text_final = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,6 +82,13 @@ public class MAIN extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 24)); // NOI18N
         jLabel1.setText("BRA-VA");
 
+        jButton1.setText("arbol");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,54 +100,55 @@ public class MAIN extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Elige_archivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Btn_Compilar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(0, 24, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Elige_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Btn_Compilar)
+                            .addComponent(jButton1))))
+                .addGap(0, 34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(16, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(9, 9, 9)
                         .addComponent(Elige_archivo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(Btn_Compilar)
-                        .addGap(79, 79, 79))))
+                        .addGap(26, 26, 26)
+                        .addComponent(jButton1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void Elige_archivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Elige_archivoActionPerformed
-
-        JFileChooser chooser = new JFileChooser();
+        Panel_codigo.setText("");
+        Text_final.setText("");
+        JFileChooser chooser = new JFileChooser("C:\\Users\\User\\Desktop\\CompiladorLenguajePropio\\Compilador_Propio\\Pruebas");
         chooser.showOpenDialog(this);
         String ruta = chooser.getSelectedFile().getAbsolutePath();
-        File archivo = new File(ruta);
+        archivo = new File(ruta);
+
         archivo = chooser.getSelectedFile();
-        String aux = "";
-        String texto = "";
+        String texto = "", aux = "";
         if (archivo != null) {
             FileReader archivos = null;
             try {
                 archivos = new FileReader(archivo);
             } catch (FileNotFoundException ex) {
             }
-
             BufferedReader lee = new BufferedReader(archivos);
             try {
                 while ((aux = lee.readLine()) != null) {
@@ -147,39 +157,72 @@ public class MAIN extends javax.swing.JFrame {
                 Panel_codigo.setText(texto);
                 codigoabierto = true;
             } catch (IOException ex) {
+                System.out.println("no eligio ningun archivo");
             }
-
             try {
                 lee.close();
             } catch (IOException ex) {
+                System.out.println("no eligio ningun archivo");
             }
         } else {
-            //JOptionPane.showMessageDialog(null,""+"\nNo se ha encontrado el archivo", "Advertencia",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "" + "\nNo se ha encontrado el archivo", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_Elige_archivoActionPerformed
 
     private void Btn_CompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_CompilarActionPerformed
+        Text_final.setText("");
         if (codigoabierto == true) {
             LexerCup lexer;
-            parser p=null;
+            parser p = null;
+           
             try {
+               
                 lexer = new LexerCup((new FileReader(archivo)));
-                System.out.println("antes del parse");
+               
                 p = new parser(lexer);
-                System.out.println("en medio");
+                
                 p.parse();
-                System.out.println("despues del parse");
+                
+
+                if (lexer.erroresLexicos.size() == 0) {
+                    JOptionPane.showMessageDialog(this, "no se encontraron errores de caracteres especiales");
+                    for (int i = 0; i < p.errores.size(); i++) {
+                        Text_final.append(p.errores.get(i).toString() + " ");
+                        System.out.println(p.errores.get(i));
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "se encontraron errores de caracteres especiales");
+                    for (int i = 0; i < lexer.erroresLexicos.size(); i++) {
+                        Text_final.append(lexer.erroresLexicos.get(i) + "\n");
+                    }
+                    for (int i = 0; i < p.errores.size(); i++) {
+                        System.out.println(p.errores.get(i));
+                        Text_final.append(p.errores.get(i).toString() + "\n");
+                    }
+                }
+                Text_final.append("\n");
+                for (int i = 0; i < p.gramas.size(); i++) {
+                    Text_final.append(p.gramas.get(i).toString() + "\n");
+                }
+                String formato = "edge [color=red];" + hacerDFS(p.raiz);
+                p.raiz.exportarArbol(formato, "AST");
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
+                    System.out.println("entro a la exception");
                 Symbol sym = p.getS();
-                System.out.println("error en columna "+(sym.right)+" fila: "+ (sym.left)+ ", texto: "+sym.toString());
+                System.out.println("error en columna " + (sym.right) + " fila: " + (sym.left) + ", texto: " + sym.toString());
             }
-
         } else {
             JOptionPane.showMessageDialog(this, "no se ha abierto ningun archivo valido");
         }
     }//GEN-LAST:event_Btn_CompilarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        // String formato = "edge [color=red];" + hacerDFS(p.raiz);
+        //      p.raiz.exportarArbol(formato, "AST");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -216,11 +259,45 @@ public class MAIN extends javax.swing.JFrame {
         });
     }
 
+    public String hacerDFS(Nodo node) {
+        ArrayList<String> recorrido = new ArrayList<>();
+        DFS(node, recorrido);
+        DFSAristas(node, node.getIdNodo(), recorrido);
+        String formato = "";
+        for (int i = 0; i < recorrido.size(); i++) {
+            formato += recorrido.get(i);
+        }
+        return formato;
+    }
+
+    public void DFS(Nodo node, ArrayList<String> recorrido) {
+        if (!node.getEtiqueta().equals("VACIO")) {
+            System.out.println(node.toString());
+            recorrido.add(node.toString());
+        }
+        for (int i = 0; i < node.getHijos().size(); i++) {
+            DFS(node.getHijos().get(i), recorrido);
+        }
+    }
+
+    public void DFSAristas(Nodo node, int padre, ArrayList<String> recorrido) {
+        if (node.getIdNodo() != padre) {
+            if (!node.getEtiqueta().equals("VACIO")) {
+                recorrido.add(padre + "->" + node.getIdNodo() + ";");
+            }
+        }
+        for (int i = 0; i < node.getHijos().size(); i++) {
+            DFSAristas(node.getHijos().get(i), node.getIdNodo(), recorrido);
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_Compilar;
     private javax.swing.JButton Elige_archivo;
     private javax.swing.JTextArea Panel_codigo;
     private javax.swing.JTextArea Text_final;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -231,6 +308,4 @@ public class MAIN extends javax.swing.JFrame {
 
 /*comandos para ejectutar
     jflex LexerCup.flex
-java -jar java-cuo-11a.jar Sintax.cup
-
-*/
+java -jar java-cuo-11a.jar Sintax.cup */

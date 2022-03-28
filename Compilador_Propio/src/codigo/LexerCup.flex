@@ -1,45 +1,36 @@
 package codigo;
 import java_cup.runtime.Symbol;
-
+import java.util.ArrayList;
 %%
-
 %unicode
 %class LexerCup
 %cup
 %line
 %column
-
 %state COMENTARIOSIM
-%state COMENTARIOPARR
+
 %{
     public String lexeme;
     String comentario="";
     String cadena="";
-    
+    ArrayList erroresLexicos = new ArrayList();
 %}
-
-
-
 LETRA = [a-zA-Z]
 DIGITO = [0-9]+
 ESPACIO = [" "]
 COMILLA = \"
-COMENTARIOA= "*-"
-COMENTARIOC= "-*"
-COMENTARIOSI="~~"
+COMENTAR= "~~"
 DIGITOFLOAT = ([0-9]*[.])?[0-9]+
 COMA = ","
 MAIN=Main
-IGUAL = :=?
-
+IGUAL = "?="
 DOSPUNTOS= "::"
 PARENTESISI = "("
 PARENTESISD = ")"
 LLAVEIZ = "{"
 LLAVEDER = "}"
-SALTOLINEA = \n|\r|\n\r|\t|{ESPACIO}
-SALTO=\n
 
+SALTOLINEA = \n|\r|\n\r|\t|{ESPACIO}
 AND = &
 OR = "|"
 OPREL = <|>|<=|>=|=
@@ -47,7 +38,6 @@ FUNCION=Fun
 OPADICION = [+-]
 OPMULTI = [*/]
 IF = "If"
-
 VBOOLTRUE= TRUE
 VBOOLFALSE= FALSE
 FOR =For
@@ -64,13 +54,10 @@ RETURN=Return
 BOOLEAN=Bool
 ASIGNACCION= <--
 ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
-
-
-
 %%
 
 <YYINITIAL>{
-    {IF}            {return new Symbol(sym.TKN_IF,yyline+1 ,yycolumn+1 ,yytext());}
+    {IF}            {return new Symbol(sym.TKN_IF           ,yyline+1 ,yycolumn+1 ,yytext());}
     {AND}           {return new Symbol(sym.TKN_AND          ,yyline+1 ,yycolumn+1 ,yytext());}
     {VBOOLTRUE}     {return new Symbol(sym.TKN_TRUE         ,yyline+1 ,yycolumn+1 ,yytext());}
     {VBOOLFALSE}    {return new Symbol(sym.TKN_FALSE        ,yyline+1 ,yycolumn+1 ,yytext());}
@@ -106,17 +93,14 @@ ID = {LETRA}({LETRA}|{DIGITO})*|{LETRA}({LETRA}|{DIGITO})*
     {ASIGNACCION}   {return new Symbol(sym.TKN_ASIGNACCION  ,yyline+1 ,yycolumn+1 ,yytext());}
     {ID}            {return new Symbol(sym.TKN_ID           ,yyline+1 ,yycolumn+1 ,yytext());}
     {SALTOLINEA}    {}
-    {ESPACIO}       {}
-    {COMENTARIOA}   {yybegin(COMENTARIOPARR);}    
-    {COMENTARIOSI}  {yybegin(COMENTARIOSIM);}
-    .               {  }
+    {COMENTAR}      {yybegin(COMENTARIOSIM);}
+    .               { erroresLexicos.add("Error lexico en linea: "+ (yyline+1) +" y columna " + (yycolumn+1) +" y en el texto: "+yytext()); }
 }
-<COMENTARIOPARR>{
-    {COMENTARIOC}   {yybegin(YYINITIAL);}
-    .                   {}
-}
+
 <COMENTARIOSIM>{
-    {SALTO}    {yybegin(YYINITIAL);}
-    .               {}
+    .          {}
+    {SALTOLINEA}   {yybegin(YYINITIAL);}
+    
+     
 }
 
