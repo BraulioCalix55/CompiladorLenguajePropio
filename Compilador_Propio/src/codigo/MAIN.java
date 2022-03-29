@@ -99,7 +99,7 @@ public class MAIN extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Elige_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Btn_Compilar))))
-                .addGap(0, 34, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,11 +177,12 @@ public class MAIN extends javax.swing.JFrame {
                     /*for (int i = 0; i < p.gramas.size(); i++) {
                         Text_final.append(p.gramas.get(i).toString() + "\n");
                     }*/
+
                     for (int i = 0; i < p.errores.size(); i++) {
-                        Text_final.append(p.errores.get(i).toString() + " ");
+                        Text_final.append(p.errores.get(i).toString() + "\n");
                         //System.out.println(p.errores.get(i));
                     }
-                    
+
                 } else {
                     JOptionPane.showMessageDialog(this, "se encontraron errores de caracteres especiales");
                     for (int i = 0; i < lexer.erroresLexicos.size(); i++) {
@@ -195,10 +196,17 @@ public class MAIN extends javax.swing.JFrame {
                 Text_final.append("\n");
 
                 if (p.errores.isEmpty()) {
-                    
+                    Text_final.setText("NO HAY ERRORES QUE MOSTRAR");
                     String formato = "edge [color=purple];" + hacerDFS(p.raiz);
                     p.raiz.exportarArbol(formato, "AST");
                     JOptionPane.showMessageDialog(this, "Árbol generado de forma satisfactoria");
+                    int salida = JOptionPane.showConfirmDialog(this, "desea mostrar las gramaticas encontradas? ");
+                    if (salida == 0) {
+                        Text_final.append("\n");
+                        for (int i = 0; i < p.gramas.size(); i++) {
+                            Text_final.append(p.gramas.get(i).toString() + "\n");
+                        }
+                    }
                 } else {
                     JOptionPane.showMessageDialog(this, "No se puede generar el arbol si el programa tiene errores");
                 }
@@ -294,7 +302,9 @@ public class MAIN extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     boolean codigoabierto = false;
     File archivo = new File("C:\\Users\\User\\Desktop\\CompiladorLenguajePropio\\Compilador_Propio\\Prueba1.txt");
+    boolean arbol = false;
 }
+
 
 /*comandos para ejectutar
     jflex LexerCup.flex
