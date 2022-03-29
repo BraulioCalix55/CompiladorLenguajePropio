@@ -14,10 +14,11 @@ Main{
 		Metodo(para1,para2,para3)
 		Char letra<-- L
 	}
-	Sout("codigo")For(12::30){
-		If(22<55){
-			Sout("impresion")
-		}
+	Sout("codigo")
+		For(12::30){
+			If(22<55){
+				Sout("impresion")
+			}
 		Metodo(para1,para2,para3)
 		Char letra<-- L
 	}
