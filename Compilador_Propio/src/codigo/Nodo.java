@@ -14,56 +14,22 @@ public class Nodo {
     private String etiqueta;
     private ArrayList<Nodo> hijos = new ArrayList<>();
     private int idNodo;
-    private String Ambito="";
-    private String tipo=" ";
-    private int offset=1000;
+    
 
     public Nodo() {
     }
 
-    public Nodo(String etiqueta, int idNodo, String tipo, int offset, String Ambito) {
-        this.etiqueta = etiqueta;
-        this.idNodo = idNodo;
-        this.tipo = tipo;
-        this.offset = offset;
-        this.Ambito=Ambito;
-    }
+   
     /////
     public Nodo(String _etiqueta, int _idNodo) {
         this.etiqueta = _etiqueta;
         this.idNodo = _idNodo;
         
     }    
-    public Nodo(String _etiqueta, int _idNodo, String Ambito) {
-        this.etiqueta = _etiqueta;
-        this.idNodo = _idNodo;
-        this.Ambito = Ambito;
-    }
+   
 
-    public String getTipo() {
-        return tipo;
-    }
-
-     
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
-    public String getAmbito() {
-        return Ambito;
-    }
-
-    public void setAmbito(String Ambito) {
-        this.Ambito = Ambito;
-    }
+    
+   
   
     public void exportarArbol(String dotFormat, String fileName) {
         GraphViz gv = new GraphViz();
@@ -74,9 +40,6 @@ public class Nodo {
         String repesentationType = "dot";
         gv.decreaseDpi();
         gv.decreaseDpi();
-        // linux
-        //File out = new File("./" + fileName + gv.getImageDpi() + "." + type);
-        //windows
         File out = new File(fileName + "." + type);
         gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type, repesentationType), out);
     }
@@ -115,3 +78,25 @@ public class Nodo {
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//private String Ambito="";
+//    private String tipo=" ";
+//    private int offset=1000;

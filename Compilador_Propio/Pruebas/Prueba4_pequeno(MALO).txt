@@ -1,0 +1,14 @@
+Main
+	Sout"hola")
+	Switch (num){
+		Cas 1::
+		int num <--8
+		EndCas
+		Cas li :: 
+		sout("das")
+		EndCas
+		Def::
+		Sout("num")
+	}
+	Float num 5.5
+}

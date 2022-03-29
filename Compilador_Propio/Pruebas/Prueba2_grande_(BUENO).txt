@@ -1,0 +1,31 @@
+Main{
+	For(12::30){
+		If(22<55){
+			Sout("impresion")
+		}
+		Metodo(para1,para2,para3)
+		Char letra<-- L
+	}
+	Sout("codigo")
+	For(12::30){
+		If(22<55){
+			Sout("impresion")
+		}
+		Metodo(para1,para2,para3)
+		Char letra<-- L
+	}
+	Sout("codigo")For(12::30){
+		If(22<55){
+			Sout("impresion")
+		}
+		Metodo(para1,para2,para3)
+		Char letra<-- L
+	}
+	Sout("codigo")
+}
+Fun Int mayor (num1,num2,num3){
+	Int num1<--5
+	Int num2<--2
+	Sout("numeros")
+	Return num
+}

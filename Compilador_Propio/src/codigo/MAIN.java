@@ -51,7 +51,6 @@ public class MAIN extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         Text_final = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,13 +81,6 @@ public class MAIN extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 24)); // NOI18N
         jLabel1.setText("BRA-VA");
 
-        jButton1.setText("arbol");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -106,8 +98,7 @@ public class MAIN extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Elige_archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Btn_Compilar)
-                            .addComponent(jButton1))))
+                            .addComponent(Btn_Compilar))))
                 .addGap(0, 34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -121,9 +112,7 @@ public class MAIN extends javax.swing.JFrame {
                         .addGap(9, 9, 9)
                         .addComponent(Elige_archivo)
                         .addGap(18, 18, 18)
-                        .addComponent(Btn_Compilar)
-                        .addGap(26, 26, 26)
-                        .addComponent(jButton1))
+                        .addComponent(Btn_Compilar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(59, 59, 59)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -157,12 +146,12 @@ public class MAIN extends javax.swing.JFrame {
                 Panel_codigo.setText(texto);
                 codigoabierto = true;
             } catch (IOException ex) {
-                
+
             }
             try {
                 lee.close();
             } catch (IOException ex) {
-                
+
             }
         } else {
             JOptionPane.showMessageDialog(null, "" + "\nNo se ha encontrado el archivo", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -174,42 +163,50 @@ public class MAIN extends javax.swing.JFrame {
         if (codigoabierto == true) {
             LexerCup lexer;
             parser p = null;
-           
+
             try {
-               
+
                 lexer = new LexerCup((new FileReader(archivo)));
-               
+
                 p = new parser(lexer);
-                
+
                 p.parse();
-                
 
                 if (lexer.erroresLexicos.size() == 0) {
                     JOptionPane.showMessageDialog(this, "no se encontraron errores de caracteres especiales");
+                    /*for (int i = 0; i < p.gramas.size(); i++) {
+                        Text_final.append(p.gramas.get(i).toString() + "\n");
+                    }*/
                     for (int i = 0; i < p.errores.size(); i++) {
                         Text_final.append(p.errores.get(i).toString() + " ");
-                        System.out.println(p.errores.get(i));
+                        //System.out.println(p.errores.get(i));
                     }
+                    
                 } else {
                     JOptionPane.showMessageDialog(this, "se encontraron errores de caracteres especiales");
                     for (int i = 0; i < lexer.erroresLexicos.size(); i++) {
                         Text_final.append(lexer.erroresLexicos.get(i) + "\n");
                     }
                     for (int i = 0; i < p.errores.size(); i++) {
-                        System.out.println(p.errores.get(i));
+                        //System.out.println(p.errores.get(i));
                         Text_final.append(p.errores.get(i).toString() + "\n");
                     }
                 }
                 Text_final.append("\n");
-                for (int i = 0; i < p.gramas.size(); i++) {
-                    Text_final.append(p.gramas.get(i).toString() + "\n");
+
+                if (p.errores.isEmpty()) {
+                    
+                    String formato = "edge [color=purple];" + hacerDFS(p.raiz);
+                    p.raiz.exportarArbol(formato, "AST");
+                    JOptionPane.showMessageDialog(this, "Árbol generado de forma satisfactoria");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se puede generar el arbol si el programa tiene errores");
                 }
-                String formato = "edge [color=purple];" + hacerDFS(p.raiz);
-                p.raiz.exportarArbol(formato, "AST");
+
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MAIN.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
-                    System.out.println("entro a la exception");
+                System.out.println("entro a la exception");
                 Symbol sym = p.getS();
                 System.out.println("error en columna " + (sym.right) + " fila: " + (sym.left) + ", texto: " + sym.toString());
             }
@@ -217,12 +214,6 @@ public class MAIN extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "no se ha abierto ningun archivo valido");
         }
     }//GEN-LAST:event_Btn_CompilarActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        // String formato = "edge [color=red];" + hacerDFS(p.raiz);
-        //      p.raiz.exportarArbol(formato, "AST");
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -272,7 +263,7 @@ public class MAIN extends javax.swing.JFrame {
 
     public void DFS(Nodo node, ArrayList<String> recorrido) {
         if (!node.getEtiqueta().equals("VACIO")) {
-            System.out.println(node.toString());
+            //System.out.println(node.toString());
             recorrido.add(node.toString());
         }
         for (int i = 0; i < node.getHijos().size(); i++) {
@@ -297,7 +288,6 @@ public class MAIN extends javax.swing.JFrame {
     private javax.swing.JButton Elige_archivo;
     private javax.swing.JTextArea Panel_codigo;
     private javax.swing.JTextArea Text_final;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

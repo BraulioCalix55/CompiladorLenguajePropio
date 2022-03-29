@@ -41,16 +41,16 @@ start with INICIO;
 INICIO ::=   TKN_MAIN:id TKN_LLAVEIZ STATEMENTS:b TKN_LLAVEDER FUNCIONES:d
 {:
         parser.gramas.add("Bloque Main Reconocido satisfactoriamente");
-        System.out.println(id);
+        //System.out.println(id);
         Nodo nodo = new Nodo(id.toString(),parser.cont);
         parser.cont++;
         nodo.addHijo(b);
-        System.out.println("nodo b");
+        //System.out.println("nodo b");
         nodo.addHijo(d); 
-        System.out.println("nodo d");       
+        //System.out.println("nodo d");       
         parser.raiz=nodo;
-:}
-
+:}|TKN_ID TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER FUNCIONES {:parser.errores.add("\nFalta el Main");:}
+  |TKN_MAIN error STATEMENTS TKN_LLAVEDER FUNCIONES {:parser.errores.add("\nfalta '{' en el main");:}
 ;
 // FUNCIONES O NO DESPUES DEL MAIN
 FUNCIONES::= FUNCION:i FUNCIONES:s
@@ -59,7 +59,7 @@ FUNCIONES::= FUNCION:i FUNCIONES:s
                 parser.cont++;
                 nodo.addHijo(s);   
                 nodo.addHijo(i);
-                System.out.println("nodo i");
+                //System.out.println("nodo i");
                 RESULT=nodo;
                 :}
             |    {:
@@ -71,8 +71,7 @@ FUNCIONES::= FUNCION:i FUNCIONES:s
 //GRAMATICA PARA FUNCIONES
 
 FUNCION::= TKN_FUNCION TIPO:s TKN_ID:id TKN_PARENTESISI LISTA_ARGS:lis TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS:b TKN_RETURN TKN_ID TKN_LLAVEDER 
-{:parser.gramas.add("Una Funcion Reconocida satisfactoriamente");
-                
+{:parser.gramas.add("Una Funcion Reconocida satisfactoriamente");    
                 Nodo nodo = new Nodo(id.toString(),parser.cont);
                 parser.cont++;
                 nodo.addHijo(s);
@@ -201,8 +200,10 @@ TKN_IF TKN_PARENTESISI CONDICION:di2 TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS:s TK
     nodo.addHijo(s);
     RESULT=nodo;
 :}
-|error TKN_PARENTESISI CONDICION TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add("Falta poner 'IF' ");:}
+|TKN_ID TKN_PARENTESISI CONDICION TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add("Falta poner 'IF' o se escribio mal ");:}
 |TKN_IF error CONDICION TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add("Falta poner '(' ");:}
+|TKN_IF TKN_PARENTESISI CONDICION error TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add("Falta poner ')' ");:}
+|TKN_IF TKN_PARENTESISI CONDICION TKN_PARENTESISD error STATEMENTS TKN_LLAVEDER {:parser.errores.add("Falta poner '{' ");:}
 ;
 //DECLARACIONES
 //revisar errores de DECLARACIONES
@@ -219,6 +220,11 @@ DECLARACION::=
     parser.cont++;  
     RESULT=nodo;
     :}
+//errores dde la primera que es de ints    
+    |error TKN_ID TKN_ASIGNACCION TKN_DIGITO {:parser.errores.add("falta el tipo Int de declaracion");:}
+    |TKN_INT TKN_ID error TKN_DIGITO {:parser.errores.add("falta '<--' de declaracion");:}
+    |TKN_INT TKN_ID TKN_ASIGNACCION error {:parser.errores.add("falta un valor para la declaracion");:}
+
     |TKN_BOOLEAN TKN_ID:i TKN_ASIGNACCION TKN_TRUE:di
 {:parser.gramas.add("Una Asignacion Reconocida satisfactoriamente");
 Nodo nodo = new Nodo("DECLARACION",parser.cont);
@@ -229,9 +235,12 @@ Nodo nodo = new Nodo("DECLARACION",parser.cont);
     parser.cont++;    
     nodo.addHijo(new Nodo(di.toString(),parser.cont));
     parser.cont++;  
-    RESULT=nodo;
-:}
-    |TKN_BOOLEAN TKN_ID:i TKN_ASIGNACCION TKN_FALSE:di 
+    RESULT=nodo;:}
+    |error TKN_ID TKN_ASIGNACCION TKN_TRUE{:parser.errores.add("falta el tipo BOOLEAN de declaracion");:}
+    |TKN_BOOLEAN TKN_ID error TKN_TRUE {:parser.errores.add("falta '<--' de declaracion");:}
+    |TKN_BOOLEAN TKN_ID TKN_ASIGNACCION error {:parser.errores.add("falta un valor TRUE para la declaracion");:}
+    
+|TKN_BOOLEAN TKN_ID:i TKN_ASIGNACCION TKN_FALSE:di 
 {:parser.gramas.add("Una Asignacion Reconocida satisfactoriamente");
 Nodo nodo = new Nodo("DECLARACION",parser.cont);
     parser.cont++;
@@ -243,6 +252,7 @@ Nodo nodo = new Nodo("DECLARACION",parser.cont);
     parser.cont++;  
     RESULT=nodo;
 :}
+
     |TKN_CHAR  TKN_ID:i  TKN_ASIGNACCION TKN_LETRA:di 
 {:parser.gramas.add("Una Asignacion Reconocida satisfactoriamente");
 Nodo nodo = new Nodo("DECLARACION",parser.cont);
@@ -255,6 +265,12 @@ Nodo nodo = new Nodo("DECLARACION",parser.cont);
     parser.cont++;  
     RESULT=nodo;
 :}
+|error  TKN_ID  TKN_ASIGNACCION TKN_LETRA {:parser.errores.add("no se puso el tipo char");:} 
+|TKN_CHAR  error  TKN_ASIGNACCION TKN_LETRA {:parser.errores.add("no se puso el id");:} 
+|TKN_CHAR  TKN_ID  error TKN_LETRA {:parser.errores.add("no se puso '<--'");:} 
+|TKN_CHAR  TKN_ID  TKN_ASIGNACCION error {:parser.errores.add("no se puso un valor al char");:} 
+
+
 |TKN_FLOAT TKN_ID:i TKN_ASIGNACCION TKN_DIGITOFLOAT:di
 {:parser.gramas.add("Una Asignacion Reconocida satisfactoriamente");
 Nodo nodo = new Nodo("DECLARACION",parser.cont);
@@ -267,6 +283,9 @@ Nodo nodo = new Nodo("DECLARACION",parser.cont);
     parser.cont++;  
     RESULT=nodo;
 :}
+|error TKN_ID TKN_ASIGNACCION TKN_DIGITOFLOAT {:parser.errores.add("falta el tipo FLOAT de declaracion");:}
+    |TKN_FLOAT TKN_ID error TKN_DIGITOFLOAT {:parser.errores.add("falta '<--' de declaracion");:}
+    |TKN_FLOAT TKN_ID TKN_ASIGNACCION error {:parser.errores.add("falta un valor FLOAT para la declaracion");:}
 
 ;
 //tipo declaracion para aint bool bool y char y tipo de salida tkn_digito true false letra
@@ -286,10 +305,8 @@ FOR ::=
         nodo.addHijo(s);    
         RESULT=nodo;
 :}
-    
 
-
-|error TKN_PARENTESISI TKN_DIGITO TKN_DOSPUNTOS TKN_DIGITO TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add(" Falta poner FOR ");:}
+    |TKN_ID TKN_PARENTESISI TKN_DIGITO TKN_DOSPUNTOS TKN_DIGITO TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add(" Falta poner FOR o se escribio mal");:}
     |TKN_FOR TKN_PARENTESISI error TKN_DOSPUNTOS TKN_DIGITO TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add(" Falta poner un valor de inicio en el for");:}
     |TKN_FOR TKN_PARENTESISI TKN_DIGITO error TKN_DIGITO TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_LLAVEDER {:parser.errores.add(" Falta poner '::'en el for");:}
 ;
@@ -335,9 +352,12 @@ TKN_SWITCH TKN_PARENTESISI TIPOSW:s TKN_PARENTESISD TKN_LLAVEIZ CASOSA:cas TKN_L
         nodo.addHijo(cas);
         RESULT=nodo;
 :} 
-|error  TKN_PARENTESISI TIPOSW TKN_PARENTESISD TKN_LLAVEIZ {:parser.errores.add(" Falta el enunciado switch\n");:}
+|error TKN_PARENTESISI TIPOSW TKN_PARENTESISD TKN_LLAVEIZ {:parser.errores.add(" Falta el enunciado switch\n");:}
 |TKN_SWITCH error TIPOSW TKN_PARENTESISD TKN_LLAVEIZ {:parser.errores.add(" Falta un ( \n");:}
 |TKN_SWITCH TKN_PARENTESISI error TKN_PARENTESISD TKN_LLAVEIZ {:parser.errores.add(" no ingreso un tipo valido en el switch\n");:}
+|TKN_SWITCH TKN_PARENTESISI TIPOSW error TKN_LLAVEIZ {:parser.errores.add(" No se puso ')'\n");:}
+|TKN_SWITCH TKN_PARENTESISI TIPOSW TKN_PARENTESISD error {:parser.errores.add(" No se puso '{' en el Switch \n");:}
+
 ;
 TIPOSW::=
     TKN_ID:s
@@ -357,6 +377,7 @@ TIPOSW::=
     parser.cont++;
     RESULT=nodo;
 :}
+    
 ;
 //CASOS
 CASOSA::=
@@ -369,6 +390,9 @@ CASOSA::=
     nodo.addHijo(ca);
     RESULT=nodo;
 :}
+    |error TIPOSW TKN_DOSPUNTOS STATEMENTS TKN_ENDCASE CASOS {:parser.errores.add(" No se puso Cas \n");:}
+    |TKN_CASE error TKN_DOSPUNTOS STATEMENTS TKN_ENDCASE CASOS {:parser.errores.add(" No se puso valor para el cas \n");:}
+    |TKN_CASE TIPOSW error STATEMENTS TKN_ENDCASE CASOS {:parser.errores.add(" No se puso valor '::' para el cas \n");:}
 ;
 //CASO SOLO, DEFAULT O VACIO
 CASOS::=CASOSA:cas
@@ -384,8 +408,8 @@ CASOS::=CASOSA:cas
         parser.cont++;
         nodo.addHijo(s);
         RESULT=nodo;
-:}
-     
+:}|error TKN_DOSPUNTOS STATEMENTS {:parser.errores.add("falta el Def");:}
+  |TKN_DEFAULT error STATEMENTS {:parser.errores.add("falta ::");:}
 ;
 
 //IMPRIMIR
@@ -397,7 +421,7 @@ TKN_IMPRIMIR TKN_PARENTESISI TKN_COMILLA TIPOPRI TKN_COMILLA TKN_PARENTESISD
     parser.cont++;
     RESULT=nodo;
 :}
-|error TKN_PARENTESISI TKN_COMILLA TIPOPRI TKN_COMILLA TKN_PARENTESISD {:parser.errores.add(" falta un sout\n");:}
+|TKN_ID TKN_PARENTESISI TKN_COMILLA TIPOPRI TKN_COMILLA TKN_PARENTESISD {:parser.errores.add(" Sout mal escrito\n");:}
 |TKN_IMPRIMIR TKN_PARENTESISI error TIPOPRI TKN_COMILLA TKN_PARENTESISD{:parser.errores.add(" falta una '\n");:}
 |TKN_IMPRIMIR TKN_PARENTESISI TKN_COMILLA  TIPOPRI error TKN_PARENTESISD{:parser.errores.add(" falta una '\n");:}
 |TKN_IMPRIMIR error TKN_COMILLA TIPOPRI TKN_COMILLA TKN_PARENTESISD {:parser.errores.add(" falta un '(' \n");:}
