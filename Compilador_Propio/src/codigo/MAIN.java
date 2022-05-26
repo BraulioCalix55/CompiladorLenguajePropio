@@ -165,13 +165,9 @@ public class MAIN extends javax.swing.JFrame {
             parser p = null;
 
             try {
-
                 lexer = new LexerCup((new FileReader(archivo)));
-
                 p = new parser(lexer);
-
                 p.parse();
-
                 if (lexer.erroresLexicos.size() == 0) {
                     JOptionPane.showMessageDialog(this, "no se encontraron errores de caracteres especiales");
                     /*for (int i = 0; i < p.gramas.size(); i++) {
@@ -182,7 +178,8 @@ public class MAIN extends javax.swing.JFrame {
                         Text_final.append(p.errores.get(i).toString() + "\n");
                         //System.out.println(p.errores.get(i));
                     }
-
+                    ArrayList<Integer> numeros= new ArrayList();
+                    
                 } else {
                     JOptionPane.showMessageDialog(this, "se encontraron errores de caracteres especiales");
                     for (int i = 0; i < lexer.erroresLexicos.size(); i++) {
@@ -207,6 +204,8 @@ public class MAIN extends javax.swing.JFrame {
                             Text_final.append(p.gramas.get(i).toString() + "\n");
                         }
                     }
+                    //System.out.println(p.maximo());
+                    
                 } else {
                     JOptionPane.showMessageDialog(this, "No se puede generar el arbol si el programa tiene errores");
                 }
@@ -308,4 +307,6 @@ public class MAIN extends javax.swing.JFrame {
 
 /*comandos para ejectutar
     jflex LexerCup.flex
-java -jar java-cuo-11a.jar Sintax.cup */
+    java -jar java-cup-11a.jar Sintax.cup
+
+*/

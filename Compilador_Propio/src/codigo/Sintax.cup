@@ -9,6 +9,10 @@ parser code {:
      ArrayList gramas = new ArrayList();
     public Nodo raiz;
     public int cont = 0;
+    public int maximo(){
+    int a=5;
+    return a;
+}
     ArrayList errores=new ArrayList();
     public Symbol s;
     @Override
@@ -36,7 +40,7 @@ terminal TKN_COMILLA ,TKN_AND,TKN_OR, TKN_FLOAT,TKN_OPREL ,TKN_FOR ,TKN_VOID,TKN
 terminal TKN_DOSPUNTOS, TKN_SWITCH ,TKN_CASE ,TKN_ENDCASE ,TKN_DEFAULT,TKN_LETRA,TKN_FALSE,TKN_TRUE ,TKN_INT ,TKN_CHAR ,TKN_BOOLEAN ,TKN_ASIGNACCION,TKN_ID;
 non terminal TIPOPRI;
 non terminal Nodo INICIO,LISTA_ARGS,WHILE,TIPOSW,STATEMENTS,CASOSA,CASOS,FUNCIONES,SWITCH,FOR,IF,FUNCION,TIPO,VALOR,IMPRIMIR,LLAMADO,DECLARACION,OPCONDICION, CONDICION,CONDICIONP;
-
+//tipo para las fuciones
 //GRAMATICA PARA EL MAIN Y DESPUES FUNCIONES
 start with INICIO;
 INICIO ::=   TKN_MAIN:id TKN_LLAVEIZ STATEMENTS:b TKN_LLAVEDER FUNCIONES:d
@@ -82,7 +86,8 @@ FUNCION::= TKN_FUNCION TIPO:s TKN_ID:id TKN_PARENTESISI LISTA_ARGS:lis TKN_PAREN
          
                 RESULT=nodo;
 :}
-            |error TIPO TKN_ID  TKN_PARENTESISI LISTA_ARGS TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_RETURN TKN_ID TKN_LLAVEDER {:parser.errores.add("Falta poner 'Fun' ");:} 
+            |error TIPO TKN_ID  TKN_PARENTESISI LISTA_ARGS TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_RETURN TKN_ID TKN_LLAVEDER 
+                {:parser.errores.add("Falta poner 'Fun' ");:} 
             |TKN_FUNCION TIPO error TKN_PARENTESISI LISTA_ARGS TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_RETURN TKN_ID TKN_LLAVEDER {:parser.errores.add("No se puso un ID valido de funcion");:} 
             |TKN_FUNCION TIPO TKN_ID error LISTA_ARGS TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS TKN_RETURN TKN_ID TKN_LLAVEDER {:parser.errores.add("No se puso un '(' en funcion");:}
 ;
@@ -191,6 +196,7 @@ STATEMENTS ::=
                 :}
 ;
 //BLOQUE IF
+//BLOQUE ELSE!!!!
 //revisar errores de asignaciones
 IF::=   
 TKN_IF TKN_PARENTESISI CONDICION:di2 TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS:s TKN_LLAVEDER {:
@@ -215,8 +221,6 @@ DECLARACION::=
     parser.cont++;
     nodo.addHijo(new Nodo(i.toString(),parser.cont));
     parser.cont++;
-    nodo.addHijo(new Nodo("<--",parser.cont));
-    parser.cont++;    
     nodo.addHijo(new Nodo(di.toString(),parser.cont));
     parser.cont++;  
     RESULT=nodo;
@@ -232,8 +236,6 @@ Nodo nodo = new Nodo("DECLARACION",parser.cont);
     parser.cont++;
     nodo.addHijo(new Nodo(i.toString(),parser.cont));
     parser.cont++;
-    nodo.addHijo(new Nodo("<--",parser.cont));
-    parser.cont++;    
     nodo.addHijo(new Nodo(di.toString(),parser.cont));
     parser.cont++;  
     RESULT=nodo;:}
@@ -247,8 +249,6 @@ Nodo nodo = new Nodo("DECLARACION",parser.cont);
     parser.cont++;
     nodo.addHijo(new Nodo(i.toString(),parser.cont));
     parser.cont++;
-    nodo.addHijo(new Nodo("<--",parser.cont));
-    parser.cont++;    
     nodo.addHijo(new Nodo(di.toString(),parser.cont));
     parser.cont++;  
     RESULT=nodo;
@@ -260,8 +260,6 @@ Nodo nodo = new Nodo("DECLARACION",parser.cont);
     parser.cont++;
     nodo.addHijo(new Nodo(i.toString(),parser.cont));
     parser.cont++;
-    nodo.addHijo(new Nodo("<--",parser.cont));
-    parser.cont++;    
     nodo.addHijo(new Nodo(di.toString(),parser.cont));
     parser.cont++;  
     RESULT=nodo;
@@ -278,8 +276,6 @@ Nodo nodo = new Nodo("DECLARACION",parser.cont);
     parser.cont++;
     nodo.addHijo(new Nodo(i.toString(),parser.cont));
     parser.cont++;
-    nodo.addHijo(new Nodo("<--",parser.cont));
-    parser.cont++;    
     nodo.addHijo(new Nodo(di.toString(),parser.cont));
     parser.cont++;  
     RESULT=nodo;
@@ -292,14 +288,12 @@ Nodo nodo = new Nodo("DECLARACION",parser.cont);
 //tipo declaracion para aint bool bool y char y tipo de salida tkn_digito true false letra
 //BLOQUE FOOOR
 FOR ::=
-    TKN_FOR TKN_PARENTESISI TKN_DIGITO:di TKN_DOSPUNTOS:dos TKN_DIGITO:di2 TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS:s TKN_LLAVEDER  
+    TKN_FOR TKN_PARENTESISI TKN_DIGITO:di TKN_DOSPUNTOS TKN_DIGITO:di2 TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS:s TKN_LLAVEDER  
 {:
         parser.gramas.add("Un Bloque FOR Reconocido satisfactoriamente");
         Nodo nodo = new Nodo("FOR",parser.cont);
         parser.cont++;
         nodo.addHijo(new Nodo(di.toString(),parser.cont));
-        parser.cont++;
-        nodo.addHijo(new Nodo (dos.toString(),parser.cont));
         parser.cont++;
         nodo.addHijo(new Nodo (di2.toString(),parser.cont));
         parser.cont++;
@@ -337,8 +331,7 @@ TKN_WHILE TKN_PARENTESISI CONDICION:C TKN_PARENTESISD TKN_LLAVEIZ STATEMENTS:s T
         parser.cont++;
         nodo.addHijo(C);
         nodo.addHijo(s);
-        RESULT=nodo;
-
+        RESULT=nodo;   
         :}
 ;
 
@@ -358,7 +351,6 @@ TKN_SWITCH TKN_PARENTESISI TIPOSW:s TKN_PARENTESISD TKN_LLAVEIZ CASOSA:cas TKN_L
 |TKN_SWITCH TKN_PARENTESISI error TKN_PARENTESISD TKN_LLAVEIZ {:parser.errores.add(" no ingreso un tipo valido en el switch\n");:}
 |TKN_SWITCH TKN_PARENTESISI TIPOSW error TKN_LLAVEIZ {:parser.errores.add(" No se puso ')'\n");:}
 |TKN_SWITCH TKN_PARENTESISI TIPOSW TKN_PARENTESISD error {:parser.errores.add(" No se puso '{' en el Switch \n");:}
-
 ;
 TIPOSW::=
     TKN_ID:s
@@ -445,8 +437,26 @@ TIPOPRI::=
             nodo.addHijo(v2);
             RESULT=nodo;
             :}
-            |VALOR TKN_OR VALOR
-            |VALOR TKN_OPREL VALOR
+            |VALOR:v1 TKN_OR:id VALOR:v2
+            {:
+            Nodo nodo=new Nodo("CONDICION",parser.cont);
+            parser.cont++;
+            nodo.addHijo(v1);
+            nodo.addHijo(new Nodo(id.toString(),parser.cont));
+            parser.cont++;
+            nodo.addHijo(v2);
+            RESULT=nodo;
+            :}
+            |VALOR:v1 TKN_OPREL:id VALOR:v2
+            {:
+            Nodo nodo=new Nodo("CONDICION",parser.cont);
+            parser.cont++;
+            nodo.addHijo(v1);
+            nodo.addHijo(new Nodo(id.toString(),parser.cont));
+            parser.cont++;
+            nodo.addHijo(v2);
+            RESULT=nodo;
+            :}
             |VALOR TKN_IGUAL VALOR
             
 
